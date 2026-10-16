@@ -1,457 +1,741 @@
+
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101827"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Workout Tracker"><link rel="manifest" href="manifest.json"><title>5-Day Workout Tracker</title>
-<style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Workout Tracker">
+<link rel="manifest" href="manifest.json">
+<title>No Days Wasted | Workout Tracker</title>
 
+<style>
 :root {
   --bg: #080808;
-  --panel: rgba(18, 18, 18, 0.72);
-  --panel2: rgba(30, 10, 10, 0.72);
+  --panel: rgba(18,18,18,.72);
+  --panel2: rgba(30,10,10,.72);
   --text: #f5f5f5;
   --muted: #b0b0b0;
   --accent: #e32636;
   --line: #59252b;
   --danger: #ff5c5c;
 }
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#101b2d,#090f1b 65%);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:linear-gradient(160deg,#101b2d,#090f1b 65%);
+  color:var(--text);
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+}
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("./ega.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: min(95vw, 600px);
-  opacity: 0.020;
-  pointer-events: none;
-  z-index: 0;
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:url("./ega.png");
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:min(95vw,600px);
+  opacity:.02;
+  pointer-events:none;
+  z-index:0;
 }
-button,input,select{font:inherit}button{cursor:pointer}
+button,input,select { font:inherit; }
+button { cursor:pointer; }
 .wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 850px;
-  margin: auto;
-  padding: 20px 14px 48px;
+  position:relative;
+  z-index:1;
+  max-width:850px;
+  margin:auto;
+  padding:20px 14px 48px;
 }
-.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:6px 0 20px}.eyebrow{font-size:.75rem;color:var(--accent);letter-spacing:.13em;text-transform:uppercase;font-weight:800}.title{font-size:clamp(1.6rem,5vw,2.35rem);line-height:1.1;margin:5px 0}.sub{color:var(--muted);margin:8px 0 0}.pill{border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--muted);font-size:.8rem;white-space:nowrap}.days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:18px 0}.daybtn{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:11px 3px;color:var(--muted);font-weight:750}.daybtn span{display:block;font-size:.72rem;font-weight:500;margin-top:3px}.daybtn.active{background:var(--accent);color:#092018;border-color:var(--accent)}.panel{background:rgba(18,18,18,.70);border:1px solid var(--line);border-radius:20px;padding:17px;margin:12px 0}.headrow{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.h2{font-size:1.35rem;margin:0 0 4px}.muted{color:var(--muted);font-size:.9rem}.progress{height:7px;background:#29374d;border-radius:99px;overflow:hidden;margin:14px 0 5px}.bar{height:100%;width:0;background:var(--accent);transition:width .2s}.exercise{border:1px solid var(--line);border-radius:15px;padding:13px;margin:12px 0;background:#101a2a}.exhead{display:flex;gap:10px;align-items:flex-start}.check{width:23px;height:23px;accent-color:var(--accent);flex:0 0 auto;margin-top:2px}.exname{font-weight:800;font-size:1.02rem}.meta{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}.tag{background:var(--panel2);border-radius:7px;padding:4px 8px;font-size:.78rem;color:#dbe6f4}.note{color:var(--muted);font-size:.84rem;margin:8px 0}.substitution{color:#c4d5e9;font-size:.82rem}.sets{width:100%;border-collapse:separate;border-spacing:0 6px;margin-top:8px}.sets th{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:650;text-align:left;padding:0 5px 3px}.sets td{padding:5px;background:#18263a}.sets td:first-child{border-radius:8px 0 0 8px;width:38px;text-align:center;color:var(--muted)}.sets td:last-child{border-radius:0 8px 8px 0;text-align:center;width:40px}.sets input{width:100%;min-width:0;border:1px solid #33445d;border-radius:7px;background:#0c1523;color:var(--text);padding:8px 5px;text-align:center}.sets input::placeholder{color:#75849b}.setdone{accent-color:var(--accent);width:19px;height:19px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:11px;padding:10px 13px;font-weight:700}.btn.primary{background:var(--accent);color:#092018;border-color:var(--accent)}.btn.small{font-size:.82rem;padding:7px 10px}.timerbox{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.timer{font-size:2.3rem;font-weight:850;font-variant-numeric:tabular-nums;letter-spacing:.03em}.timerbuttons{display:flex;gap:6px;flex-wrap:wrap}.timerbuttons button{padding:8px 10px}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:130px}.field label{font-size:.78rem;color:var(--muted)}.field input{background:#0c1523;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px;width:100%}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:var(--panel2);padding:12px;border-radius:12px}.stat strong{display:block;font-size:1.25rem}.stat span{color:var(--muted);font-size:.76rem}.footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:22px}.hidden{display:none!important}.toast{color:var(--accent);font-size:.85rem;min-height:1.2em}.historyrow{padding:10px 0;border-bottom:1px solid var(--line)}.historyrow:last-child{border:0}@media(max-width:480px){.wrap{padding:15px 10px 35px}.panel{padding:13px}.days{gap:4px}.daybtn{font-size:.82rem;padding:10px 1px}.daybtn span{font-size:.65rem}.title{font-size:1.7rem}.sets th{font-size:.65rem}.sets input{padding:8px 2px;font-size:.9rem}.stats{gap:5px}.stat{padding:9px}}
-@media print{body{background:#fff;color:#111}.wrap{max-width:none;padding:0}.top,.days,.timerpanel,.actions,.footer,.historypanel,.no-print{display:none!important}.panel,.exercise{background:#fff;color:#111;border:1px solid #bbb;break-inside:avoid}.muted,.note,.substitution,.sets th{color:#444}.sets td{background:#f5f5f5}.sets input{background:#fff;color:#111;border-color:#aaa}.tag{background:#eee;color:#111}.bar{background:#555}}
-
-/* No Days Wasted brand footer */
-.brand-footer {
-  margin-top: 32px;
-  padding: 20px 12px;
-  text-align: center;
-  border-top: 1px solid var(--line);
-}
-
-.brand-name {
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 3px;
-}
-
-.brand-tagline {
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 1.5px;
-}
-
-.brand-signature {
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-
-/* Daily Mission quote card */
-.daily-mission {
-  background: rgba(8, 8, 8, 0.45);
-  border: 1px solid #8f1d29;
-  padding: 20px;
-}
-
-.daily-mission-label {
-  color: #e32636;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-}
-
-.daily-quote {
-  color: #f5f5f5;
-  font-size: 1.1rem;
-  font-weight: 650;
-  line-height: 1.6;
-  margin: 14px 0;
-}
-
-.daily-quote-source {
-  color: #b0b0b0;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-}
-
-
-/* No Days Wasted logo in the header */
 .top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin:6px 0 20px;
+}
+.eyebrow {
+  font-size:.75rem;
+  color:var(--accent);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:800;
+}
+.title {
+  font-size:clamp(1.6rem,5vw,2.35rem);
+  line-height:1.1;
+  margin:5px 0;
+}
+.sub { color:var(--muted); margin:8px 0 0; }
+.pill {
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 10px;
+  color:var(--muted);
+  font-size:.8rem;
+  white-space:nowrap;
+}
+.days {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  margin:18px 0;
+}
+.daybtn {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:11px 3px;
+  color:var(--muted);
+  font-weight:750;
+}
+.daybtn span {
+  display:block;
+  font-size:.72rem;
+  font-weight:500;
+  margin-top:3px;
+}
+.daybtn.active {
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.panel {
+  background:rgba(18,18,18,.70);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:17px;
+  margin:12px 0;
+}
+.headrow {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+.h2 { font-size:1.35rem; margin:0 0 4px; }
+.muted { color:var(--muted); font-size:.9rem; }
+.progress {
+  height:7px;
+  background:#29374d;
+  border-radius:99px;
+  overflow:hidden;
+  margin:14px 0 5px;
+}
+.bar {
+  height:100%;
+  width:0;
+  background:var(--accent);
+  transition:width .2s;
+}
+.exercise {
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+  margin:12px 0;
+  background:#101a2a;
+}
+
+.exercise-image-toggle {
+  margin: 10px 0;
+}
+
+.exercise-image-button {
+  width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-}
-
-.ndw-logo {
-  width: 160px;
-  height: 100px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-
-/* Daily stretch dropdown */
-.stretch-dropdown {
-  margin-top: 18px;
-  padding: 14px;
-  background: rgba(8, 8, 8, 0.55);
+  gap: 10px;
+  padding: 9px 11px;
+  background: rgba(8, 8, 8, .55);
+  color: #ff8b94;
   border: 1px solid var(--line);
-  border-radius: 14px;
-}
-
-.stretch-dropdown .headrow {
-  align-items: center;
-}
-
-.stretch-dropdown .h2 {
-  font-size: 1.05rem;
-}
-
-.stretch-tip {
-  color: var(--muted);
-  font-size: 0.82rem;
-  margin: 12px 0;
-}
-
-.stretch-item {
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-}
-
-.stretch-item strong {
-  display: block;
-  font-size: 0.92rem;
-}
-
-.stretch-item p {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 0.84rem;
-}
-
-.stretch-duration {
-  display: inline-block;
-  margin-top: 6px;
-  color: var(--accent);
-  font-size: 0.78rem;
+  border-radius: 9px;
+  text-align: left;
+  font-size: .85rem;
   font-weight: 700;
 }
 
-</style></head>
-<body><main class="wrap">
+.exercise-image-button:hover {
+  background: rgba(227, 38, 54, .12);
+}
 
-  <header class="top">
-    <div>
-      <div class="eyebrow">Your training plan</div>
-      <h1 class="title">5-Day Workout Tracker</h1>
-      <p class="sub">RAH DEVIL DOG · </p>
-    </div>
-  
-    <img
-      src="./ndw-logo.png"
-      alt="No Days Wasted logo"
-      class="ndw-logo"
-    >
-  </header>
-  
+.exercise-image-panel {
+  display: none;
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(8, 8, 8, .45);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+
+.exercise-image-panel.open {
+  display: block;
+}
+
+.exercise-image-panel img {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  max-height: 190px;
+  object-fit: contain;
+  margin: 0 auto;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.exercise-image-caption {
+  margin-top: 6px;
+  text-align: center;
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.exhead { display:flex; gap:10px; align-items:flex-start; }
+.check {
+  width:23px;
+  height:23px;
+  accent-color:var(--accent);
+  flex:0 0 auto;
+  margin-top:2px;
+}
+.exname { font-weight:800; font-size:1.02rem; }
+.meta { display:flex; flex-wrap:wrap; gap:7px; margin:9px 0; }
+.tag {
+  background:var(--panel2);
+  border-radius:7px;
+  padding:4px 8px;
+  font-size:.78rem;
+  color:#dbe6f4;
+}
+.note { color:var(--muted); font-size:.84rem; margin:8px 0; }
+.substitution { color:#c4d5e9; font-size:.82rem; }
+.sets {
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 6px;
+  margin-top:8px;
+}
+.sets th {
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--muted);
+  font-weight:650;
+  text-align:left;
+  padding:0 5px 3px;
+}
+.sets td { padding:5px; background:#18263a; }
+.sets td:first-child {
+  border-radius:8px 0 0 8px;
+  width:38px;
+  text-align:center;
+  color:var(--muted);
+}
+.sets td:last-child {
+  border-radius:0 8px 8px 0;
+  text-align:center;
+  width:40px;
+}
+.sets input {
+  width:100%;
+  min-width:0;
+  border:1px solid #33445d;
+  border-radius:7px;
+  background:#0c1523;
+  color:var(--text);
+  padding:8px 5px;
+  text-align:center;
+}
+.sets input::placeholder { color:#75849b; }
+.setdone { accent-color:var(--accent); width:19px; height:19px; }
+.actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.btn {
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:var(--text);
+  border-radius:11px;
+  padding:10px 13px;
+  font-weight:700;
+}
+.btn.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn.small { font-size:.82rem; padding:7px 10px; }
+.timerbox {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.timer {
+  font-size:2.3rem;
+  font-weight:850;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.03em;
+}
+.timerbuttons { display:flex; gap:6px; flex-wrap:wrap; }
+.timerbuttons button { padding:8px 10px; }
+.field { display:flex; flex-direction:column; gap:5px; flex:1; min-width:130px; }
+.field label { font-size:.78rem; color:var(--muted); }
+.field input {
+  background:#0c1523;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:10px;
+  width:100%;
+}
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.stat { background:var(--panel2); padding:12px; border-radius:12px; }
+.stat strong { display:block; font-size:1.25rem; }
+.stat span { color:var(--muted); font-size:.76rem; }
+.footer {
+  color:var(--muted);
+  font-size:.78rem;
+  text-align:center;
+  margin-top:22px;
+}
+.hidden { display:none!important; }
+.toast { color:var(--accent); font-size:.85rem; min-height:1.2em; }
+.historyrow { padding:10px 0; border-bottom:1px solid var(--line); }
+.historyrow:last-child { border:0; }
+
+.ndw-logo {
+  width:160px;
+  height:100px;
+  object-fit:contain;
+  flex-shrink:0;
+}
+.daily-mission {
+  background:rgba(8,8,8,.45);
+  border:1px solid #8f1d29;
+  padding:20px;
+}
+.daily-mission-label {
+  color:#e32636;
+  font-size:.75rem;
+  font-weight:800;
+  letter-spacing:.18em;
+}
+.daily-quote {
+  color:#f5f5f5;
+  font-size:1.1rem;
+  font-weight:650;
+  line-height:1.6;
+  margin:14px 0;
+}
+.daily-quote-source {
+  color:#b0b0b0;
+  font-size:.7rem;
+  letter-spacing:.08em;
+}
+.stretch-dropdown {
+  margin-top:18px;
+  padding:14px;
+  background:rgba(8,8,8,.55);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+.stretch-dropdown .headrow { align-items:center; }
+.stretch-dropdown .h2 { font-size:1.05rem; }
+.stretch-tip { color:var(--muted); font-size:.82rem; margin:12px 0; }
+.stretch-item { padding:12px 0; border-top:1px solid var(--line); }
+.stretch-item strong { display:block; font-size:.92rem; }
+.stretch-item p { margin:4px 0 0; color:var(--muted); font-size:.84rem; }
+.stretch-duration {
+  display:inline-block;
+  margin-top:6px;
+  color:var(--accent);
+  font-size:.78rem;
+  font-weight:700;
+}
+.brand-footer {
+  margin-top:32px;
+  padding:20px 12px;
+  text-align:center;
+  border-top:1px solid var(--line);
+}
+.brand-name {
+  color:var(--text);
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:3px;
+}
+.brand-tagline {
+  margin-top:6px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1.5px;
+}
+.brand-signature { margin-top:12px; color:var(--muted); font-size:11px; }
+
+@media(max-width:480px) {
+  .wrap { padding:15px 10px 35px; }
+  .panel { padding:13px; }
+  .days { gap:4px; }
+  .daybtn { font-size:.82rem; padding:10px 1px; }
+  .daybtn span { font-size:.65rem; }
+  .title { font-size:1.7rem; }
+  .sets th { font-size:.65rem; }
+  .sets input { padding:8px 2px; font-size:.9rem; }
+  .stats { gap:5px; }
+  .stat { padding:9px; }
+  .ndw-logo { width:100px; height:75px; }
+}
+@media print {
+  body { background:#fff; color:#111; }
+  .wrap { max-width:none; padding:0; }
+  .top,.days,.timerpanel,.actions,.footer,.historypanel,.no-print { display:none!important; }
+  .panel,.exercise { background:#fff; color:#111; border:1px solid #bbb; break-inside:avoid; }
+  .muted,.note,.substitution,.sets th { color:#444; }
+  .sets td { background:#f5f5f5; }
+  .sets input { background:#fff; color:#111; border-color:#aaa; }
+  .tag { background:#eee; color:#111; }
+  .bar { background:#555; }
+}
+
+
+
+/* NO DAYS WASTED — Slow red energy pulse */
+
+/* Outer border: slow, steady pulse */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 8px;
+  border: 3px solid #e32636;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 9999;
+
+  box-shadow: 0 0 8px rgba(227, 38, 54, 0.4);
+
+  animation: ndwPulse 5s ease-in-out infinite;
+  will-change: opacity, box-shadow;
+}
+
+/* One animation definition only */
+@keyframes ndwPulse {
+  0%, 100% {
+    opacity: 0.4;
+    border-color: rgba(227, 38, 54, 0.45);
+    box-shadow:
+      0 0 5px rgba(227, 38, 54, 0.2),
+      inset 0 0 5px rgba(227, 38, 54, 0.05);
+  }
+
+  50% {
+    opacity: 1;
+    border-color: #fc0019;
+    box-shadow:
+      0 0 12px rgba(158, 34, 44, 0.829),
+      0 0 25px rgb(161, 71, 71),
+      inset 0 0 10px rgba(227, 38, 54, 0.12);
+  }
+}
+
+/* Slower red glow for the actual page sections */
+.panel,
+.exercise,
+.daily-mission,
+.stretch-dropdown {
+  animation: sectionBorderPulse 7s ease-in-out infinite;
+}
+
+/* Sections brighten and dim without moving the layout */
+@keyframes sectionBorderPulse {
+  0%, 100% {
+    border-color: rgba(89, 37, 43, 0.65);
+    box-shadow: 0 0 3px rgba(227, 38, 54, 0.05);
+  }
+
+  50% {
+    border-color: rgba(227, 38, 54, 0.9);
+    box-shadow:
+      0 0 10px rgba(227, 38, 54, 0.22),
+      inset 0 0 6px rgba(227, 38, 54, 0.06);
+  }
+}
+
+</style>
+</head>
+
+<body>
+<main class="wrap">
+
+<header class="top">
+  <div>
+    <div class="eyebrow">Personal training plan</div>
+    <h1 class="title">5-Day Workout Tracker</h1>
+    <p class="sub">RAH DEVIL DOG</p>
+  </div>
+  <img src="./ndw-logo.png" alt="No Days Wasted logo" class="ndw-logo">
+</header>
+
 <section class="panel daily-mission" aria-live="polite">
-  <div class="daily-mission-label">DAILY MISSION</div>
-
+  <div class="daily-mission-label">DAILY QUOTES</div>
   <p id="dailyQuote" class="daily-quote">
     Discipline is choosing to keep moving, even when the easy choice is to quit.
   </p>
-
-  
-<div id="dailyQuoteSource" class="daily-quote-source">
-  NO DAYS WASTED™ · SEMPER FI
-</div>
-
-<button class="btn small" id="newQuoteBtn" type="button">
-  New Quote
-</button>
+  <div id="dailyQuoteSource" class="daily-quote-source">
+    NO DAYS WASTED™ · SEMPER FI
+  </div>
+  <button class="btn small" id="newQuoteBtn" type="button">New Quote</button>
 </section>
 
 <nav class="days" id="days" aria-label="Choose workout day"></nav>
-<section class="panel"><div class="headrow"><div><h2 class="h2" id="workoutTitle">Monday — Chest + Triceps</h2><div class="muted" id="workoutSub">About 50–60 minutes</div></div><button class="btn small" id="printBtn">Print day</button></div><div class="progress"><div class="bar" id="progressBar"></div></div><div class="muted" id="progressText">0 of 5 exercises complete</div>
-  
-<div id="exercises"></div>
 
-<!-- Daily stretch dropdown -->
-<div class="stretch-dropdown">
+<section class="panel">
   <div class="headrow">
     <div>
-      <h3 class="h2">Daily Stretches</h3>
-      <p class="muted">Recommended stretches for today's workout</p>
+      <h2 class="h2" id="workoutTitle">Monday — Chest + Triceps</h2>
+      <div class="muted" id="workoutSub">About 50–60 minutes</div>
     </div>
-
-    <button
-      class="btn small"
-      id="stretchToggle"
-      type="button"
-      aria-expanded="false"
-      aria-controls="stretchContent"
-    >
-      Show stretches
-    </button>
+    <button class="btn small" id="printBtn">Print day</button>
   </div>
 
-  <div id="stretchContent" class="hidden">
-    <p class="stretch-tip">
-      Hold each stretch gently for 20–30 seconds per side.
-      Avoid bouncing or pushing into pain.
-    </p>
-    <div id="stretchList"></div>
-  </div>
-</div>
+  <div class="progress"><div class="bar" id="progressBar"></div></div>
+  <div class="muted" id="progressText">0 exercises complete</div>
 
-<div class="actions">
-<button class="btn primary" id="finishBtn">Finish workout</button><button class="btn" id="resetBtn">Reset today's log</button></div><p class="toast" id="message" aria-live="polite"></p></section>
-<section class="panel timerpanel"><div class="timerbox"><div><div class="eyebrow">Rest timer</div><div class="timer" id="timerDisplay">01:30</div><div class="muted" id="timerStatus">Choose a rest time, then start.</div></div><div class="timerbuttons"><button class="btn small" data-seconds="60">60 sec</button><button class="btn small" data-seconds="90">90 sec</button><button class="btn small" data-seconds="120">120 sec</button><button class="btn small primary" id="timerToggle">Start</button><button class="btn small" id="timerReset">Reset</button></div></div></section>
-<section class="panel"><h2 class="h2">Body & nutrition check-in</h2><p class="muted">Optional notes saved on this device.</p><div class="stats"><div class="stat"><span>Protein target</span><strong>160–180 g</strong></div><div class="stat"><span>Calories to start</span><strong>2,700–2,800</strong></div><div class="stat"><span>Sleep goal</span><strong>7–9 hrs</strong></div></div><div class="actions" style="margin-top:14px"><div class="field"><label for="bodyweight">Today's weight (lb)</label><input id="bodyweight" type="number" step="0.1" placeholder="193.0"></div></div><div class="field" style="margin-top:10px"><label for="weeklyNotes">Notes</label><input id="weeklyNotes" type="text" placeholder="Energy, sleep, progress, etc."></div></section>
-<section class="panel historypanel"><div class="headrow"><div><h2 class="h2">Workout history</h2><p class="muted">Saved locally on this device/browser.</p></div><button class="btn small" id="exportBtn">Export backup</button></div><div id="history"></div><div class="actions"><button class="btn" id="clearHistoryBtn">Clear history</button></div></section>
+  <div id="exercises"></div>
+
+  <div class="stretch-dropdown">
+    <div class="headrow">
+      <div>
+        <h3 class="h2">Daily Stretches</h3>
+        <p class="muted">Recommended stretches for today's workout</p>
+      </div>
+      <button class="btn small" id="stretchToggle" type="button"
+        aria-expanded="false" aria-controls="stretchContent">
+        Show stretches
+      </button>
+    </div>
+    <div id="stretchContent" class="hidden">
+      <p class="stretch-tip">
+        Hold each stretch gently for 20–30 seconds per side.
+        Avoid bouncing or pushing into pain.
+      </p>
+      <div id="stretchList"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="finishBtn">Finish workout</button>
+    <button class="btn" id="resetBtn">Reset today's log</button>
+  </div>
+  <p class="toast" id="message" aria-live="polite"></p>
+</section>
+
+<section class="panel timerpanel">
+  <div class="timerbox">
+    <div>
+      <div class="eyebrow">Rest timer</div>
+      <div class="timer" id="timerDisplay">01:30</div>
+      <div class="muted" id="timerStatus">Choose a rest time, then start.</div>
+    </div>
+    <div class="timerbuttons">
+      <button class="btn small" data-seconds="60">60 sec</button>
+      <button class="btn small" data-seconds="90">90 sec</button>
+      <button class="btn small" data-seconds="120">120 sec</button>
+      <button class="btn small primary" id="timerToggle">Start</button>
+      <button class="btn small" id="timerReset">Reset</button>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2 class="h2">Body & nutrition check-in</h2>
+  <p class="muted">Optional notes saved on this device.</p>
+  <div class="stats">
+    <div class="stat"><span>Protein target</span><strong>160–180 g</strong></div>
+    <div class="stat"><span>Calories to start</span><strong>2,700–2,800</strong></div>
+    <div class="stat"><span>Sleep goal</span><strong>7–9 hrs</strong></div>
+  </div>
+  <div class="actions" style="margin-top:14px">
+    <div class="field">
+      <label for="bodyweight">Today's weight (lb)</label>
+      <input id="bodyweight" type="number" step="0.1" placeholder="193.0">
+    </div>
+  </div>
+  <div class="field" style="margin-top:10px">
+    <label for="weeklyNotes">Notes</label>
+    <input id="weeklyNotes" type="text" placeholder="Energy, sleep, progress, etc.">
+  </div>
+</section>
+
+<section class="panel historypanel">
+  <div class="headrow">
+    <div>
+      <h2 class="h2">Workout history</h2>
+      <p class="muted">Saved locally on this device/browser.</p>
+    </div>
+    <button class="btn small" id="exportBtn">Export backup</button>
+  </div>
+  <div id="history"></div>
+  <div class="actions">
+    <button class="btn" id="clearHistoryBtn">Clear history</button>
+  </div>
+</section>
+
 <p class="footer">stop being a bitch.</p>
 </main>
+
+<footer class="brand-footer">
+  <div class="brand-name">NO DAYS WASTED™</div>
+  <div class="brand-tagline">NO EXCUSES. KEEP MOVING.</div>
+  <div class="brand-signature">Created by Kevin Rodriguez</div>
+</footer>
+
 <script>
-const workouts=[
-{day:'Monday',short:'MON',focus:'Chest + Triceps',time:'About 50–60 minutes',items:[
-['Incline Dumbbell Press',3,'8–10',120,'Bench at 20–30°. Controlled lowering.','Smith incline press'],['Smith Machine Flat Bench Press',3,'6–10',120,'Keep shoulder blades stable; lower with control.','Flat dumbbell press'],['Cable Chest Fly',3,'10–15',60,'Use a comfortable stretch; do not force the shoulders back.','Light dumbbell fly'],['Dumbbell Squeeze Press',2,'10–12',60,'Keep the dumbbells gently pressed together.','Push-ups'],['Cable Triceps Pushdown',3,'10–15',60,'Keep elbows close to your sides.','Overhead cable extension']]},
-{day:'Tuesday',short:'TUE',focus:'Back + Biceps + Traps',time:'About 55–60 minutes',items:[
-['Lat Pulldown',3,'8–12',90,'Pull toward upper chest without swinging.','Pull-ups or assisted pull-ups'],['Seated Cable Row',3,'8–12',90,'Pull elbows back; avoid jerking the torso.','Seated row machine'],['One-Arm Dumbbell Row',2,'10–12 / side',60,'Pull elbow toward hip; do both sides.','One-arm cable row'],['Dumbbell Shrugs',3,'10–15',60,'Pause at the top; do not roll shoulders.','Smith machine shrug'],['Dumbbell Curl',3,'8–12',60,'Keep elbows steady and lower slowly.','Cable curl'],['Cable Rear-Delt Fly',2,'12–15',60,'Use light weight and controlled reps.','Reverse dumbbell fly']]},
-{day:'Wednesday',short:'WED',focus:'Legs + Core',time:'About 55–60 minutes',items:[
-['Smith Machine Squat',3,'6–10',120,'Use a comfortable, controlled depth.','Goblet squat'],['Dumbbell Romanian Deadlift',3,'8–12',120,'Hips back; weights close to legs; keep back neutral.','Smith Romanian deadlift'],['Leg Extension',3,'10–15',60,'Pause briefly near the top.','Controlled goblet squat if needed'],['Leg Curl',3,'10–15',60,'Control both directions.','Cable hamstring curl if ankle strap available'],['Standing Calf Raise',3,'12–20',60,'Use a comfortable full range and pause at top.','Smith machine calf raise'],['Plank',3,'30–60 sec',45,'Keep hips level and brace your midsection.','Dead bug, 10–12 reps per side']]},
-{day:'Thursday',short:'THU',focus:'Shoulders + Upper Chest',time:'About 50–60 minutes',items:[
-['Seated Dumbbell Shoulder Press',3,'6–10',120,'Use a pain-free range; avoid arching excessively.','Smith shoulder press'],['Dumbbell Lateral Raise',4,'12–20',60,'Use light weight; avoid swinging.','Single-arm cable lateral raise'],['Incline Dumbbell Press',3,'8–12',90,'Use a low incline around 20–30°.','Smith incline press'],['Low-to-High Cable Fly',2,'12–15',60,'Bring hands up and inward smoothly.','Light incline dumbbell fly'],['Cable Face Pull',2,'12–15',60,'Pull toward face with controlled movement.','Cable rear-delt fly']]},
-{day:'Friday',short:'FRI',focus:'Upper-Body Hypertrophy',time:'About 50–60 minutes',items:[
-['Flat Dumbbell Bench Press',3,'8–12',90,'Control the lowering and keep wrists stacked.','Smith flat bench'],['Seated Cable Row',3,'10–12',90,'Keep torso steady.','Seated row machine'],['Cable Chest Fly',2,'12–15',60,'Controlled stretch and squeeze.','Dumbbell squeeze press'],['Dumbbell Lateral Raise',3,'12–20',60,'Smooth reps; no swinging.','Cable lateral raise'],['Cable Triceps Pushdown',2,'10–15',60,'Keep elbows close to your sides.','Overhead cable extension'],['Dumbbell Hammer Curl',2,'10–15',60,'Keep wrists neutral.','Rope cable hammer curl']]}
+'use strict';
+
+const workouts = [
+{
+  day:'Monday', short:'MON', focus:'Chest + Triceps', time:'About 50–60 minutes',
+  items:[
+    ['Incline Dumbbell Press',3,'8–10',120,'Bench at 20–30°. Controlled lowering.','Smith incline press'],
+    ['Smith Machine Flat Bench Press',3,'6–10',120,'Keep shoulder blades stable; lower with control.','Flat dumbbell press'],
+    ['Cable Chest Fly',3,'10–15',60,'Use a comfortable stretch; do not force the shoulders back.','Light dumbbell fly'],
+    ['Dumbbell Squeeze Press',2,'10–12',60,'Keep the dumbbells gently pressed together.','Push-ups'],
+    ['Cable Triceps Pushdown',3,'10–15',60,'Keep elbows close to your sides.','Overhead cable extension']
+  ]
+},
+{
+  day:'Tuesday', short:'TUE', focus:'Back + Biceps + Traps', time:'About 55–60 minutes',
+  items:[
+    ['Lat Pulldown',3,'8–12',90,'Pull toward upper chest without swinging.','Pull-ups or assisted pull-ups'],
+    ['Seated Cable Row',3,'8–12',90,'Pull elbows back; avoid jerking the torso.','Seated row machine'],
+    ['One-Arm Dumbbell Row',2,'10–12 / side',60,'Pull elbow toward hip; do both sides.','One-arm cable row'],
+    ['Dumbbell Shrugs',3,'10–15',60,'Pause at the top; do not roll shoulders.','Smith machine shrug'],
+    ['Dumbbell Curl',3,'8–12',60,'Keep elbows steady and lower slowly.','Cable curl'],
+    ['Cable Rear-Delt Fly',2,'12–15',60,'Use light weight and controlled reps.','Reverse dumbbell fly']
+  ]
+},
+{
+  day:'Wednesday', short:'WED', focus:'Legs + Core', time:'About 55–60 minutes',
+  items:[
+    ['Smith Machine Squat',3,'6–10',120,'Use a comfortable, controlled depth.','Goblet squat'],
+    ['Dumbbell Romanian Deadlift',3,'8–12',120,'Hips back; weights close to legs; keep back neutral.','Smith Romanian deadlift'],
+    ['Leg Extension',3,'10–15',60,'Pause briefly near the top.','Controlled goblet squat if needed'],
+    ['Leg Curl',3,'10–15',60,'Control both directions.','Cable hamstring curl if ankle strap available'],
+    ['Standing Calf Raise',3,'12–20',60,'Use a comfortable full range and pause at top.','Smith machine calf raise'],
+    ['Plank',3,'30–60 sec',45,'Keep hips level and brace your midsection.','Dead bug, 10–12 reps per side']
+  ]
+},
+{
+  day:'Thursday', short:'THU', focus:'Shoulders + Upper Chest', time:'About 50–60 minutes',
+  items:[
+    ['Seated Dumbbell Shoulder Press',3,'6–10',120,'Use a pain-free range; avoid arching excessively.','Smith shoulder press'],
+    ['Dumbbell Lateral Raise',4,'12–20',60,'Use light weight; avoid swinging.','Single-arm cable lateral raise'],
+    ['Incline Dumbbell Press',3,'8–12',90,'Use a low incline around 20–30°.','Smith incline press'],
+    ['Low-to-High Cable Fly',2,'12–15',60,'Bring hands up and inward smoothly.','Light incline dumbbell fly'],
+    ['Cable Face Pull',2,'12–15',60,'Pull toward face with controlled movement.','Cable rear-delt fly']
+  ]
+},
+{
+  day:'Friday', short:'FRI', focus:'Upper-Body Hypertrophy', time:'About 50–60 minutes',
+  items:[
+    ['Flat Dumbbell Bench Press',3,'8–12',90,'Control the lowering and keep wrists stacked.','Smith flat bench'],
+    ['Seated Cable Row',3,'10–12',90,'Keep torso steady.','Seated row machine'],
+    ['Cable Chest Fly',2,'12–15',60,'Controlled stretch and squeeze.','Dumbbell squeeze press'],
+    ['Dumbbell Lateral Raise',3,'12–20',60,'Smooth reps; no swinging.','Cable lateral raise'],
+    ['Cable Triceps Pushdown',2,'10–15',60,'Keep elbows close to your sides.','Overhead cable extension'],
+    ['Dumbbell Hammer Curl',2,'10–15',60,'Keep wrists neutral.','Rope cable hammer curl']
+  ]
+}
 ];
 
+const exerciseImages = {
+  "Incline Dumbbell Press": "inclinedumbbellpress.png",
+  "Smith Machine Flat Bench Press": "benchpress.png",
+  "Cable Chest Fly": "cablechestfly.png",
+  "Dumbbell Squeeze Press": "dumbbellsqueezepress.png",
+  "Cable Triceps Pushdown": "cabletriceptpushdowns.png",
+
+  "Lat Pulldown": "latpulldownmachine.png",
+  "Seated Cable Row": "cablerow.png",
+  "One-Arm Dumbbell Row": "onearmdumbbellrow.png",
+  "Dumbbell Shrugs": "dumbbellshrugs.png",
+  "Dumbbell Curl": "bicepcurl.png",
+  "Cable Rear-Delt Fly": "CableRearDeltFly.png",
+
+  "Smith Machine Squat": "SmithMachineSquat.png",
+  "Dumbbell Romanian Deadlift": "DumbbellRomanianDeadlift.png",
+  "Leg Extension": "legextensions.png",
+  "Leg Curl": "legcurl.png",
+  "Standing Calf Raise": "standingcalfraises.png",
+  "Plank": "plank.png",
+
+  "Seated Dumbbell Shoulder Press": "SeatedDumbbellShoulderPress.png",
+  "Dumbbell Lateral Raise": "dumbbelllateralraise.png",
+  "Low-to-High Cable Fly": "LowtoHighCableFly.png",
+  "Cable Face Pull": "cablefacepull.png",
+
+  "Flat Dumbbell Bench Press": "FlatDumbbellBenchPress.png",
+  "Dumbbell Hammer Curl": "hammercurls.png"
+};
 
 const dailyStretches = {
-  Monday: [
-    {
-      name: "Doorway Chest Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Place your forearm against a doorway and gently turn your body away until you feel a comfortable chest stretch."
-    },
-    {
-      name: "Overhead Triceps Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Bring one arm overhead, bend your elbow, and gently guide it with your opposite hand."
-    },
-    {
-      name: "Cross-Body Shoulder Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Bring one arm across your chest and gently hold it near the upper arm."
-    }
+  Monday:[
+    {name:'Doorway Chest Stretch',duration:'20–30 sec per side',instructions:'Place your forearm against a doorway and gently turn your body away until you feel a comfortable chest stretch.'},
+    {name:'Overhead Triceps Stretch',duration:'20–30 sec per side',instructions:'Bring one arm overhead, bend your elbow, and gently guide it with your opposite hand.'},
+    {name:'Cross-Body Shoulder Stretch',duration:'20–30 sec per side',instructions:'Bring one arm across your chest and gently hold it near the upper arm.'}
   ],
-
-  Tuesday: [
-    {
-      name: "Standing Lat Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Reach one arm overhead and lean gently to the opposite side."
-    },
-    {
-      name: "Biceps Wall Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Place your palm against a wall with your arm extended and gently turn your body away."
-    },
-    {
-      name: "Upper Trapezius Stretch",
-      duration: "20 sec per side",
-      instructions: "Relax your shoulders and gently tilt your ear toward one shoulder. Do not pull hard on your head."
-    },
-    {
-      name: "Child's Pose with Reach",
-      duration: "20–30 sec",
-      instructions: "Kneel comfortably, sit your hips back, and reach forward. Skip this if kneeling bothers your knees."
-    }
+  Tuesday:[
+    {name:'Standing Lat Stretch',duration:'20–30 sec per side',instructions:'Reach one arm overhead and lean gently to the opposite side.'},
+    {name:'Biceps Wall Stretch',duration:'20–30 sec per side',instructions:'Place your palm against a wall with your arm extended and gently turn your body away.'},
+    {name:'Upper Trapezius Stretch',duration:'20 sec per side',instructions:'Relax your shoulders and gently tilt your ear toward one shoulder. Do not pull hard on your head.'},
+    {name:"Child's Pose with Reach",duration:'20–30 sec',instructions:'Kneel comfortably, sit your hips back, and reach forward. Skip this if kneeling bothers your knees.'}
   ],
-
-  Wednesday: [
-    {
-      name: "Standing Quadriceps Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Hold your ankle behind you and gently bring your heel toward your glutes. Keep your knees comfortable."
-    },
-    {
-      name: "Standing Hamstring Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Place one heel slightly forward, soften your knee, and hinge at your hips with a neutral back."
-    },
-    {
-      name: "Wall Calf Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Place your hands on a wall, step one foot back, and keep the rear heel down."
-    },
-    {
-      name: "Standing Hip Flexor Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Use a split stance, gently tuck your pelvis, and shift forward slightly without arching your back."
-    }
+  Wednesday:[
+    {name:'Standing Quadriceps Stretch',duration:'20–30 sec per side',instructions:'Hold your ankle behind you and gently bring your heel toward your glutes. Keep your knees comfortable.'},
+    {name:'Standing Hamstring Stretch',duration:'20–30 sec per side',instructions:'Place one heel slightly forward, soften your knee, and hinge at your hips with a neutral back.'},
+    {name:'Wall Calf Stretch',duration:'20–30 sec per side',instructions:'Place your hands on a wall, step one foot back, and keep the rear heel down.'},
+    {name:'Standing Hip Flexor Stretch',duration:'20–30 sec per side',instructions:'Use a split stance, gently tuck your pelvis, and shift forward slightly without arching your back.'}
   ],
-
-  Thursday: [
-    {
-      name: "Doorway Chest Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Place your forearm against a doorway and gently turn away to stretch your chest."
-    },
-    {
-      name: "Cross-Body Shoulder Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Bring one arm across your chest without raising your shoulder toward your ear."
-    },
-    {
-      name: "Overhead Triceps Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Bend one arm overhead and gently guide the elbow with your opposite hand."
-    },
-    {
-      name: "Standing Lat Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Reach overhead and lean slightly to the opposite side."
-    }
+  Thursday:[
+    {name:'Doorway Chest Stretch',duration:'20–30 sec per side',instructions:'Place your forearm against a doorway and gently turn away to stretch your chest.'},
+    {name:'Cross-Body Shoulder Stretch',duration:'20–30 sec per side',instructions:'Bring one arm across your chest without raising your shoulder toward your ear.'},
+    {name:'Overhead Triceps Stretch',duration:'20–30 sec per side',instructions:'Bend one arm overhead and gently guide the elbow with your opposite hand.'},
+    {name:'Standing Lat Stretch',duration:'20–30 sec per side',instructions:'Reach overhead and lean slightly to the opposite side.'}
   ],
-
-  Friday: [
-    {
-      name: "Doorway Chest Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Use a doorway to gently stretch the front of your chest."
-    },
-    {
-      name: "Standing Lat Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Reach overhead and lean gently to the opposite side."
-    },
-    {
-      name: "Biceps Wall Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Place your palm on a wall and slowly turn away until you feel a mild stretch."
-    },
-    {
-      name: "Cross-Body Shoulder Stretch",
-      duration: "20–30 sec per side",
-      instructions: "Bring one arm across your chest and hold it gently with the other arm."
-    }
+  Friday:[
+    {name:'Doorway Chest Stretch',duration:'20–30 sec per side',instructions:'Use a doorway to gently stretch the front of your chest.'},
+    {name:'Standing Lat Stretch',duration:'20–30 sec per side',instructions:'Reach overhead and lean gently to the opposite side.'},
+    {name:'Biceps Wall Stretch',duration:'20–30 sec per side',instructions:'Place your palm on a wall and slowly turn away until you feel a mild stretch.'},
+    {name:'Cross-Body Shoulder Stretch',duration:'20–30 sec per side',instructions:'Bring one arm across your chest and hold it gently with the other arm.'}
   ]
 };
 
-function renderStretches() {
-  const workout = workouts[selected];
-  const stretches = dailyStretches[workout.day] || [];
-
-  document.getElementById("stretchList").innerHTML =
-    stretches.map(stretch => `
-      <div class="stretch-item">
-        <strong>${escapeHtml(stretch.name)}</strong>
-        <span class="stretch-duration">
-          ${escapeHtml(stretch.duration)}
-        </span>
-        <p>${escapeHtml(stretch.instructions)}</p>
-      </div>
-    `).join("");
-}
-
-// Toggle the stretch dropdown open and closed.
-document.getElementById("stretchToggle").addEventListener("click", () => {
-  const content = document.getElementById("stretchContent");
-  const button = document.getElementById("stretchToggle");
-
-  const isOpening = content.classList.contains("hidden");
-
-  content.classList.toggle("hidden");
-  button.textContent = isOpening
-    ? "Hide stretches"
-    : "Show stretches";
-
-  button.setAttribute("aria-expanded", String(isOpening));
-});
-
 const dailyQuotes = [
-  {
-    text: "Semper Fidelis — Always Faithful.",
-    source: "MARINE CORPS"
-  },
-  {
-    text: "No Better Friend, No Worse Enemy.",
-    source: "MARINE CORPS"
-  },
-  {
-    text: "Discipline is doing the work, even when motivation is gone.",
-    source: "NO DAYS WASTED™"
-  },
-  {
-    text: "One more rep. One more step. Keep moving forward.",
-    source: "NO DAYS WASTED™"
-  },
-  {
-    text: "You didn't come this far to stop here.",
-    source: "NO DAYS WASTED™"
-  },
-  {
-    text: "earn your place every day.",
-    source: "NO DAYS WASTED"
-  },
-  {
-    text: "Pain is temporary. Pride in your effort lasts.",
-    source: "NO DAYS WASTED™"
-  },
-  {
-    text: "Stay ready. Stay disciplined. Earn your progress.",
-    source: "NO DAYS WASTED™"
-  },
-  {
-    text: "The mission isn't finished until the work is done.",
-    source: "NO DAYS WASTED™"
-  },
-  
-{ text: "When it gets hard, get harder.", source: "NO DAYS WASTED" },
-{ text: "Embrace the suck.", source: "NO DAYS WASTED" },
-{ text: "Never let your brothers down.", source: "NO DAYS WASTED" },
-{ text: "Earn your place every day.", source: "NO DAYS WASTED" },
-{ text: "Standards don't drop when you're tired.", source: "NO DAYS WASTED" },
-{ text: "Discipline over comfort.", source: "NO DAYS WASTED" },
-{ text: "You can rest. You don't quit.", source: "NO DAYS WASTED" },
-{ text: "Do your duty. Honor your word.", source: "NO DAYS WASTED" },
-{ text: "Make yourself hard to defeat.", source: "NO DAYS WASTED" },
-{ text: "For Chesty!", source: "1ST MAR DIV"},
-{ text: "The mission comes before your mood.", source: "NO DAYS WASTED" },
-{ text: "Earn respect through action.", source: "NO DAYS WASTED" },
-{ text: "No days wasted. No standards lowered.", source: "NO DAYS WASTED" },
-
-  {
-    text: "Small improvements every day build lasting strength.",
-    source: "NO DAYS WASTED™"
-  },
-  {
-    text: "Your standards matter most when nobody is watching.",
-    source: "NO DAYS WASTED™"
-  }
+  {text:'Semper Fidelis — Always Faithful.',source:'MARINE CORPS'},
+  {text:'No Better Friend, No Worse Enemy.',source:'MARINE CORPS'},
+  {text:'Discipline is doing the work, even when motivation is gone.',source:'NO DAYS WASTED'},
+  {text:'One more rep. One more step. Keep moving forward.',source:'NO DAYS WASTED'},
+  {text:"You didn't come this far to stop here.",source:'NO DAYS WASTED'},
+  {text:'Earn your place every day.',source:'NO DAYS WASTED'},
+  {text:'Pain is temporary. Pride in your effort lasts.',source:'NO DAYS WASTED'},
+  {text:'Stay ready. Stay disciplined. Earn your progress.',source:'NO DAYS WASTED'},
+  {text:"The mission isn't finished until the work is done.",source:'NO DAYS WASTED'},
+  {text:'When it gets hard, get harder.',source:'NO DAYS WASTED'},
+  {text:'Embrace the suck.',source:'NO DAYS WASTED'},
+  {text:'Never let your brothers down.',source:'NO DAYS WASTED'},
+  {text:"Standards don't drop when you're tired.",source:'NO DAYS WASTED'},
+  {text:'Discipline over comfort.',source:'NO DAYS WASTED'},
+  {text:"You can rest. You don't quit.",source:'NO DAYS WASTED'},
+  {text:'Do your duty. Honor your word.',source:'NO DAYS WASTED'},
+  {text:'Make yourself hard to defeat.',source:'NO DAYS WASTED'},
+  {text:'For Chesty!',source:'1ST MAR DIV'},
+  {text:'The mission comes before your mood.',source:'NO DAYS WASTED'},
+  {text:'Earn respect through action.',source:'NO DAYS WASTED'},
+  {text:'No days wasted. No standards lowered.',source:'NO DAYS WASTED'},
+  {text:'Small improvements every day build lasting strength.',source:'NO DAYS WASTED'},
+  {text:'Your standards matter most when nobody is watching.',source:'NO DAYS WASTED'}
 ];
 
 function showQuote(index) {
@@ -463,13 +747,12 @@ function showQuote(index) {
 function rotateDailyQuote() {
   const today = new Date();
   const dayNumber = Math.floor(
-    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
-    / 86400000
+    Date.UTC(today.getFullYear(),today.getMonth(),today.getDate()) / 86400000
   );
   showQuote(dayNumber % dailyQuotes.length);
 }
 
-document.getElementById('newQuoteBtn').addEventListener('click', () => {
+document.getElementById('newQuoteBtn').addEventListener('click',() => {
   const current = dailyQuotes.findIndex(
     quote => quote.text === document.getElementById('dailyQuote').textContent
   );
@@ -481,13 +764,10 @@ setInterval(() => {
   const current = dailyQuotes.findIndex(
     quote => quote.text === document.getElementById('dailyQuote').textContent
   );
-
   showQuote((current + 1) % dailyQuotes.length);
-}, 60000);
-
+},60000);
 
 const KEY = 'offlineWorkoutTracker_v1';
-
 let state = load();
 let selected = 0;
 let timerRemaining = 90;
@@ -496,183 +776,363 @@ let timerInterval = null;
 function load() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
+    const data = saved || {logs:{},profile:{},history:[]};
 
-    // Start with the existing saved data when available.
-    const data = saved || {
-      logs: {},
-      profile: {},
-      history: []
-    };
-
-    // Make sure all three sections exist.
     data.logs ||= {};
     data.profile ||= {};
     data.history ||= [];
 
-    // Import completed workouts from the old format once.
+    // Migrate older completed logs into permanent history.
     if (!data.historyMigrated) {
-  const oldHistory = Object.entries(data.logs)
-    .filter(([key, log]) => log && log.finished)
-    .map(([key, log]) => {
-      const [date, day] = key.split('|');
+      const oldHistory = Object.entries(data.logs)
+        .filter(([key,log]) => log && log.finished)
+        .map(([key,log]) => {
+          const [date,day] = key.split('|');
+          return {
+            id:log.historyId || key,
+            date,
+            day,
+            sets:log.sets || {},
+            done:log.done || {},
+            finishedAt:log.finishedAt || null
+          };
+        });
 
-      return {
-        id: key,
-        date,
-        day,
-        sets: log.sets || {},
-        done: log.done || {},
-        finishedAt: log.finishedAt || null
-      };
-    });
+      const existingIds = new Set(data.history.map(entry => entry.id));
 
-  // Keep existing history and add any older completed workouts.
-  const existingIds = new Set(data.history.map(entry => entry.id));
+      oldHistory.forEach(entry => {
+        if (!existingIds.has(entry.id)) data.history.push(entry);
+      });
 
-  oldHistory.forEach(entry => {
-    if (!existingIds.has(entry.id)) {
-      data.history.push(entry);
-    }
-  });
-
-  data.historyMigrated = true;
-
-      // Save the migration so it won't run again.
-      localStorage.setItem(KEY, JSON.stringify(data));
+      data.historyMigrated = true;
+      localStorage.setItem(KEY,JSON.stringify(data));
     }
 
     return data;
   } catch (error) {
-    return {
-      logs: {},
-      profile: {},
-      history: [],
-      historyMigrated: true
-    };
+    return {logs:{},profile:{},history:[],historyMigrated:true};
   }
 }
 
 function save() {
   try {
-    localStorage.setItem(KEY, JSON.stringify(state));
+    localStorage.setItem(KEY,JSON.stringify(state));
   } catch (error) {
-    document.getElementById('message').textContent =
-      'Could not save in this browser. Export a backup if possible.';
+    const message = document.getElementById('message');
+    if (message) {
+      message.textContent = 'Could not save in this browser. Export a backup if possible.';
+    }
   }
-
   renderHistory();
 }
 
-function dateKey(){return new Date().toLocaleDateString('en-CA')}
-function logKey(w){return dateKey()+'|'+w.day}
-function getLog(w){const k=logKey(w);if(!state.logs[k])state.logs[k]={sets:{},done:{},finished:false};return state.logs[k]}
-function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dateKey() {
+  const now = new Date();
+  return [
+    now.getFullYear(),
+    String(now.getMonth()+1).padStart(2,'0'),
+    String(now.getDate()).padStart(2,'0')
+  ].join('-');
+}
+
+function logKey(workout) {
+  return dateKey() + '|' + workout.day;
+}
+
+function getLog(workout) {
+  const key = logKey(workout);
+  if (!state.logs[key]) {
+    state.logs[key] = {sets:{},done:{},finished:false};
+  }
+  return state.logs[key];
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g,char => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  })[char]);
+}
 
 function renderDays() {
-  document.getElementById('days').innerHTML = workouts.map((w, i) =>
-    `<button class="daybtn ${i === selected ? 'active' : ''}" data-day="${i}">
-      ${w.short}<span>Day ${i + 1}</span>
+  document.getElementById('days').innerHTML = workouts.map((workout,index) =>
+    `<button class="daybtn ${index === selected ? 'active' : ''}" data-day="${index}">
+      ${workout.short}<span>Day ${index+1}</span>
     </button>`
   ).join('');
 
-  document.querySelectorAll('[data-day]').forEach(el => {
-    el.onclick = () => {
-      selected = Number(el.dataset.day);
+  document.querySelectorAll('[data-day]').forEach(button => {
+    button.onclick = () => {
+      selected = Number(button.dataset.day);
       render();
     };
   });
 }
 
-function render(){renderDays();const w=workouts[selected],log=getLog(w);document.getElementById('workoutTitle').textContent=w.day+' — '+w.focus;document.getElementById('workoutSub').textContent=w.time+' · '+w.items.length+' exercises';document.getElementById('exercises').innerHTML=w.items.map((it,i)=>{let [name,n,reps,rest,note,sub]=it;let done=!!log.done[i];let setRows=Array.from({length:n},(_,j)=>{let v=(log.sets[i]||[])[j]||{};return `<tr><td>${j+1}</td><td><input aria-label="Set ${j+1} weight" data-ex="${i}" data-set="${j}" data-field="weight" value="${escapeHtml(v.weight||'')}" placeholder="lb" inputmode="decimal"></td><td><input aria-label="Set ${j+1} reps" data-ex="${i}" data-set="${j}" data-field="reps" value="${escapeHtml(v.reps||'')}" placeholder="${escapeHtml(reps)}" inputmode="text"></td><td><input class="setdone" aria-label="Set ${j+1} complete" type="checkbox" data-ex="${i}" data-set="${j}" data-field="done" ${v.done?'checked':''}></td></tr>`}).join('');return `<article class="exercise"><div class="exhead"><input class="check" type="checkbox" aria-label="Mark ${escapeHtml(name)} complete" data-exdone="${i}" ${done?'checked':''}><div style="flex:1"><div class="exname">${i+1}. ${escapeHtml(name)}</div><div class="meta"><span class="tag">${n} sets</span><span class="tag">${escapeHtml(reps)} reps</span><span class="tag">Rest ${rest>=60?Math.floor(rest/60)+(rest%60?':'+String(rest%60).padStart(2,'0'):'')+' min':' '+rest+' sec'}</span><button class="btn small" data-rest="${rest}">Start rest</button></div></div></div><div class="note">${escapeHtml(note)}</div><div class="substitution">Swap if needed: ${escapeHtml(sub)}</div><table class="sets"><thead><tr><th>Set</th><th>Weight</th><th>Reps done</th><th>✓</th></tr></thead><tbody>${setRows}</tbody></table></article>`}).join('');document.getElementById('progressText').textContent=w.items.filter((x,i)=>log.done[i]).length+' of '+w.items.length+' exercises complete'+(log.finished?' · Workout saved':'');document.getElementById('progressBar').style.width=(w.items.filter((x,i)=>log.done[i]).length/w.items.length*100)+'%';document.getElementById('bodyweight').value=state.profile.bodyweight||'';document.getElementById('weeklyNotes').value=state.profile.notes||'';
+function render() {
+  renderDays();
 
-wireInputs();
-renderStretches();
-document.getElementById('message').textContent = '';
+  const workout = workouts[selected];
+  const log = getLog(workout);
+
+  document.getElementById('workoutTitle').textContent =
+    workout.day + ' — ' + workout.focus;
+  document.getElementById('workoutSub').textContent =
+    workout.time + ' · ' + workout.items.length + ' exercises';
+
+  document.getElementById('exercises').innerHTML = workout.items.map((item,index) => {
+    const [name,numSets,reps,rest,note,substitution] = item;
+    
+const imageFile = exerciseImages[name];
+
+
+const imageMarkup = imageFile
+  ? `
+    <div class="exercise-image-toggle">
+      <button
+        type="button"
+        class="exercise-image-button"
+        data-image-toggle="${index}"
+        aria-expanded="false"
+      >
+        <span>▶ Show Exercise</span>
+        <span aria-hidden="true">＋</span>
+      </button>
+
+      <div class="exercise-image-panel">
+        <img
+          src="./images/${imageFile}"
+          alt="${escapeHtml(name)} demonstration"
+          loading="lazy"
+          onerror="this.parentElement.innerHTML =
+            '<p class=&quot;exercise-image-caption&quot;>Image could not be loaded. Check the filename.</p>';"
+        >
+        <div class="exercise-image-caption">
+          ${escapeHtml(name)}
+        </div>
+      </div>
+    </div>
+  `
+  : '';
+
+    const exerciseDone = log.done[index] === true;
+
+    const setRows = Array.from({length:numSets},(_,setIndex) => {
+      const value = (log.sets[index] || [])[setIndex] || {};
+      return `<tr>
+        <td>${setIndex+1}</td>
+        <td><input aria-label="Set ${setIndex+1} weight"
+          data-ex="${index}" data-set="${setIndex}" data-field="weight"
+          value="${escapeHtml(value.weight || '')}" placeholder="lb" inputmode="decimal"></td>
+        <td><input aria-label="Set ${setIndex+1} reps"
+          data-ex="${index}" data-set="${setIndex}" data-field="reps"
+          value="${escapeHtml(value.reps || '')}" placeholder="${escapeHtml(reps)}" inputmode="text"></td>
+        <td><input class="setdone" aria-label="Set ${setIndex+1} complete"
+          type="checkbox" data-ex="${index}" data-set="${setIndex}" data-field="done"
+          ${value.done === true ? 'checked' : ''}></td>
+      </tr>`;
+    }).join('');
+
+    const restLabel = rest >= 60
+      ? Math.floor(rest/60) + (rest%60 ? ':' + String(rest%60).padStart(2,'0') : '') + ' min'
+      : rest + ' sec';
+
+    return `<article class="exercise">
+      <div class="exhead">
+        <input class="check" type="checkbox"
+          aria-label="Mark ${escapeHtml(name)} complete"
+          data-exdone="${index}" ${exerciseDone ? 'checked' : ''}>
+        <div style="flex:1">
+          <div class="exname">${index+1}. ${escapeHtml(name)}</div>
+          <div class="meta">
+            <span class="tag">${numSets} sets</span>
+            <span class="tag">${escapeHtml(reps)} reps</span>
+            <span class="tag">Rest ${restLabel}</span>
+            <button class="btn small" data-rest="${rest}">Start rest</button>
+          </div>
+        </div>
+            </div>
+      ${imageMarkup}
+      <div class="note">${escapeHtml(note)}</div>
+      <div class="substitution">Swap if needed: ${escapeHtml(substitution)}</div>
+      <table class="sets">
+        <thead><tr><th>Set</th><th>Weight</th><th>Reps done</th><th>✓</th></tr></thead>
+        <tbody>${setRows}</tbody>
+      </table>
+    </article>`;
+  }).join('');
+
+  document.getElementById('bodyweight').value = state.profile.bodyweight || '';
+  document.getElementById('weeklyNotes').value = state.profile.notes || '';
+
+  wireInputs();
+  renderStretches();
+  renderProgressOnly();
+
+  document.getElementById('message').textContent = '';
 }
-function wireInputs(){document.querySelectorAll('[data-ex][data-field]').forEach(el=>el.addEventListener('change',()=>{const log=getLog(workouts[selected]),i=+el.dataset.ex,j=+el.dataset.set,f=el.dataset.field;log.sets[i] ||= [];log.sets[i][j] ||= {};log.sets[i][j][f]=f==='done'?el.checked:el.value;save();}));
 
-document.querySelectorAll('[data-exdone]').forEach(el => {
-  el.onchange = () => {
-    const log = getLog(workouts[selected]);
+function renderProgressOnly() {
+  const workout = workouts[selected];
+  const log = getLog(workout);
 
-    // Save the checkbox change.
-    log.done[el.dataset.exdone] = el.checked;
+  // Keep main checkboxes in sync with saved exercise completion.
+  document.querySelectorAll('[data-exdone]').forEach(element => {
+    const index = Number(element.dataset.exdone);
+    element.checked = log.done[index] === true;
+  });
 
-    save();
-    renderProgressOnly();
+  const completed = workout.items.filter(
+    (item,index) => log.done[index] === true
+  ).length;
 
-    // Automatically finish when every exercise is checked.
-    autoFinishIfComplete();
-  };
+  document.getElementById('progressText').textContent =
+    `${completed} of ${workout.items.length} exercises complete` +
+    (log.finished ? ' · Workout saved' : '');
+
+  document.getElementById('progressBar').style.width =
+    `${completed / workout.items.length * 100}%`;
+}
+
+function renderStretches() {
+  const workout = workouts[selected];
+  const stretches = dailyStretches[workout.day] || [];
+
+  document.getElementById('stretchList').innerHTML = stretches.map(stretch =>
+    `<div class="stretch-item">
+      <strong>${escapeHtml(stretch.name)}</strong>
+      <span class="stretch-duration">${escapeHtml(stretch.duration)}</span>
+      <p>${escapeHtml(stretch.instructions)}</p>
+    </div>`
+  ).join('');
+}
+
+document.getElementById('stretchToggle').addEventListener('click',() => {
+  const content = document.getElementById('stretchContent');
+  const button = document.getElementById('stretchToggle');
+  const opening = content.classList.contains('hidden');
+
+  content.classList.toggle('hidden');
+  button.textContent = opening ? 'Hide stretches' : 'Show stretches';
+  button.setAttribute('aria-expanded',String(opening));
 });
 
-document.querySelectorAll('[data-rest]').forEach(el=>el.onclick=()=>startTimer(+el.dataset.rest));}
-function renderProgressOnly(){const w=workouts[selected],l=getLog(w),n=w.items.filter((x,i)=>l.done[i]).length;document.getElementById('progressText').textContent=n+' of '+w.items.length+' exercises complete'+(l.finished?' · Workout saved':'');document.getElementById('progressBar').style.width=n/w.items.length*100+'%';}
+function wireInputs() {
+    // Show or hide exercise demonstration images.
+  document.querySelectorAll('[data-image-toggle]').forEach(button => {
+    button.onclick = () => {
+      const panel = button.nextElementSibling;
+      const opening = !panel.classList.contains('open');
 
+      panel.classList.toggle('open', opening);
+      button.setAttribute('aria-expanded', String(opening));
+
+      button.innerHTML = opening
+        ? '<span>▼ Hide Exercise</span><span aria-hidden="true">－</span>'
+        : '<span>▶ Show Exercise</span><span aria-hidden="true">＋</span>';
+    };
+  });
+  // Save each set's weight, reps, and completion state.
+  document.querySelectorAll('[data-ex][data-field]').forEach(element => {
+    element.onchange = () => {
+      const workout = workouts[selected];
+      const log = getLog(workout);
+      const exerciseIndex = Number(element.dataset.ex);
+      const setIndex = Number(element.dataset.set);
+      const field = element.dataset.field;
+
+      log.sets[exerciseIndex] ||= [];
+      log.sets[exerciseIndex][setIndex] ||= {};
+
+      log.sets[exerciseIndex][setIndex][field] =
+        field === 'done' ? element.checked : element.value;
+
+      if (field === 'done') {
+        const totalSets = workout.items[exerciseIndex][1];
+        const allSetsDone = Array.from(
+          {length:totalSets},
+          (_,index) => log.sets[exerciseIndex]?.[index]?.done === true
+        ).every(Boolean);
+
+        log.done[exerciseIndex] = allSetsDone;
+      }
+
+      save();
+      renderProgressOnly();
+
+      if (field === 'done') autoFinishIfComplete();
+    };
+  });
+
+  // Allow the main exercise checkbox to be used manually too.
+  document.querySelectorAll('[data-exdone]').forEach(element => {
+    element.onchange = () => {
+      const workout = workouts[selected];
+      const log = getLog(workout);
+      const exerciseIndex = Number(element.dataset.exdone);
+
+      log.done[exerciseIndex] = element.checked;
+
+      save();
+      renderProgressOnly();
+      autoFinishIfComplete();
+    };
+  });
+
+  document.querySelectorAll('[data-rest]').forEach(element => {
+    element.onclick = () => startTimer(Number(element.dataset.rest));
+  });
+}
 
 function autoFinishIfComplete() {
-  const w = workouts[selected];
-  const log = getLog(w);
+  const workout = workouts[selected];
+  const log = getLog(workout);
 
-  // Check whether every exercise is marked complete.
-  const allComplete = w.items.every(
-    (item, index) => log.done[index]
+  const allComplete = workout.items.every(
+    (item,index) => log.done[index] === true
   );
 
-  if (!allComplete) {
-    return;
-  }
+  if (!allComplete) return;
 
-  // Find this workout session's existing history entry.
-  const existing = state.history.find(
-    entry => entry.id === log.historyId
+  const existing = state.history.find(entry => entry.id === log.historyId);
+  const alreadyComplete = existing && workout.items.every(
+    (item,index) => existing.done?.[index] === true
   );
 
-  // Avoid saving the same completed session twice.
-  const historyAlreadyComplete =
-    existing &&
-    w.items.every((item, index) => existing.done?.[index]);
+  if (alreadyComplete && log.finished) return;
 
-  if (historyAlreadyComplete) {
-    return;
-  }
-
-  // Save or update the completed workout.
   finish();
 }
 
 function finish() {
-  const w = workouts[selected];
-  const l = getLog(w);
+  const workout = workouts[selected];
+  const log = getLog(workout);
 
-  
-  // Mark the workout as finished.
-  l.finished = true;
-  l.finishedAt = new Date().toISOString();
+  log.finished = true;
+  log.finishedAt = new Date().toISOString();
 
-  // Give this workout session its own permanent ID.
-  // Repeated clicks on Finish won't create duplicate entries.
-  if (!l.historyId) {
-    l.historyId = logKey(w) + '|' + Date.now();
+  // Give this session a permanent ID, separate from the daily log key.
+  if (!log.historyId) {
+    log.historyId = logKey(workout) + '|' + Date.now();
   }
 
-
-  // Create a permanent snapshot for workout history.
   const historyEntry = {
-    id: l.historyId,
-    date: dateKey(),
-    day: w.day,
-    sets: JSON.parse(JSON.stringify(l.sets)),
-    done: JSON.parse(JSON.stringify(l.done)),
-    finishedAt: l.finishedAt
+    id:log.historyId,
+    date:dateKey(),
+    day:workout.day,
+    sets:JSON.parse(JSON.stringify(log.sets)),
+    done:JSON.parse(JSON.stringify(log.done)),
+    finishedAt:log.finishedAt
   };
 
-  // Update today's existing history entry or add a new one.
   const existingIndex = state.history.findIndex(
     entry => entry.id === historyEntry.id
   );
 
-  if (existingIndex !== -1) {
+  if (existingIndex >= 0) {
     state.history[existingIndex] = historyEntry;
   } else {
     state.history.push(historyEntry);
@@ -682,70 +1142,179 @@ function finish() {
   renderProgressOnly();
 
   document.getElementById('message').textContent =
-    'workout saved, do it again tomorrow maggot';
+    'Workout saved. Do it again tomorrow, maggot.';
 }
 
-function resetDay(){if(!confirm('Reset today’s log for '+workouts[selected].day+'? This removes today’s sets and checkmarks for this day.'))return;delete state.logs[logKey(workouts[selected])];save();render();}
+function resetDay() {
+  if (!confirm(
+    'Reset today’s log for ' + workouts[selected].day +
+    '? This removes today’s sets and checkmarks but keeps workout history.'
+  )) return;
+
+  // Only remove today's working log. Never clear permanent history here.
+  delete state.logs[logKey(workouts[selected])];
+
+  save();
+  render();
+}
 
 function renderHistory() {
   const root = document.getElementById('history');
+  if (!root) return;
 
-  // Read from permanent history, not today's workout logs.
   const rows = [...state.history]
-    .sort((a, b) => {
-      return (b.finishedAt || '').localeCompare(a.finishedAt || '');
-    })
-    .slice(0, 12);
+    .sort((a,b) => (b.finishedAt || '').localeCompare(a.finishedAt || ''))
+    .slice(0,12);
 
-  root.innerHTML = rows.length
-    ? rows.map(entry => {
-        const w = workouts.find(x => x.day === entry.day);
-        const done = w
-          ? w.items.filter((x, i) => entry.done?.[i]).length
-          : 0;
+  root.innerHTML = rows.length ? rows.map(entry => {
+    const workout = workouts.find(item => item.day === entry.day);
+    const completed = workout
+      ? workout.items.filter((item,index) => entry.done?.[index] === true).length
+      : 0;
 
-        const time = entry.finishedAt
-          ? new Date(entry.finishedAt).toLocaleTimeString([], {
-              hour: 'numeric',
-              minute: '2-digit'
-            })
-          : 'Saved';
+    const time = entry.finishedAt
+      ? new Date(entry.finishedAt).toLocaleTimeString([],{
+          hour:'numeric',minute:'2-digit'
+        })
+      : 'Saved';
 
-        return `
-          <div class="historyrow">
-            <strong>${escapeHtml(entry.day)}</strong>
-            <span class="muted">${escapeHtml(entry.date)}</span>
-            <div class="muted">
-              ${done} exercises checked · ${escapeHtml(time)}
-            </div>
-          </div>
-        `;
-      }).join('')
-    : '<p class="muted">No completed workouts yet. Tap "Finish workout" to add a session here.</p>';
+    return `<div class="historyrow">
+      <strong>${escapeHtml(entry.day)}</strong>
+      <span class="muted">${escapeHtml(entry.date)}</span>
+      <div class="muted">${completed} exercises checked · ${escapeHtml(time)}</div>
+    </div>`;
+  }).join('') : '<p class="muted">No completed workouts yet. Tap "Finish workout" to add a session here.</p>';
 }
-function startTimer(sec){timerRemaining=sec;updateTimer();if(timerInterval){clearInterval(timerInterval);timerInterval=null;}document.getElementById('timerStatus').textContent='Ready when you are.';document.getElementById('timerToggle').textContent='Start'}function updateTimer(){document.getElementById('timerDisplay').textContent=String(Math.floor(timerRemaining/60)).padStart(2,'0')+':'+String(timerRemaining%60).padStart(2,'0')}
-function toggleTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;document.getElementById('timerToggle').textContent='Resume';document.getElementById('timerStatus').textContent='Paused';return}if(timerRemaining<=0)timerRemaining=90;document.getElementById('timerToggle').textContent='Pause';document.getElementById('timerStatus').textContent='Resting…';timerInterval=setInterval(()=>{timerRemaining--;updateTimer();if(timerRemaining<=0){clearInterval(timerInterval);timerInterval=null;document.getElementById('timerToggle').textContent='Start again';document.getElementById('timerStatus').textContent='Rest complete — next set!';if('vibrate'in navigator)navigator.vibrate([180,80,180]);}},1000)}
-document.getElementById('finishBtn').onclick=finish;document.getElementById('resetBtn').onclick=resetDay;document.getElementById('printBtn').onclick=()=>window.print();document.getElementById('timerToggle').onclick=toggleTimer;document.getElementById('timerReset').onclick=()=>startTimer(90);document.querySelectorAll('[data-seconds]').forEach(b=>b.onclick=()=>startTimer(+b.dataset.seconds));['bodyweight','weeklyNotes'].forEach(id=>document.getElementById(id).addEventListener('change',e=>{state.profile[id==='bodyweight'?'bodyweight':'notes']=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(err){}}));document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='workout-tracker-backup-'+dateKey()+'.json';a.click();URL.revokeObjectURL(url)};
-document.getElementById('clearHistoryBtn').onclick = () => {
-  if (confirm(
-    'Clear all saved workout logs and history? Export a backup first if you want to keep them.'
-  )) {
-    state.logs = {};
-    state.history = [];
 
-    save();
-    render();
+
+
+function startTimer(seconds) {
+  // Stop the previous countdown, if one is running.
+  if (timerInterval !== null) {
+    clearInterval(timerInterval);
+    timerInterval = null;
   }
+
+  // Set the selected exercise's rest duration.
+  timerRemaining = seconds;
+  updateTimer();
+
+  // Start the countdown immediately.
+  runTimer();
+}
+
+function updateTimer() {
+  const minutes = Math.floor(timerRemaining / 60);
+  const seconds = timerRemaining % 60;
+
+  document.getElementById('timerDisplay').textContent =
+    String(minutes).padStart(2, '0') + ':' +
+    String(seconds).padStart(2, '0');
+}
+
+function runTimer() {
+  // Don't create a second interval.
+  if (timerInterval !== null) return;
+
+  document.getElementById('timerToggle').textContent = 'Pause';
+  document.getElementById('timerStatus').textContent = 'Resting…';
+
+  timerInterval = setInterval(() => {
+    timerRemaining = Math.max(0, timerRemaining - 1);
+    updateTimer();
+
+    if (timerRemaining === 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+
+      document.getElementById('timerToggle').textContent = 'Start again';
+      document.getElementById('timerStatus').textContent =
+        'Rest complete — next set!';
+
+      if ('vibrate' in navigator) {
+        navigator.vibrate([180, 80, 180]);
+      }
+    }
+  }, 1000);
+}
+
+function toggleTimer() {
+  if (timerInterval !== null) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+
+    document.getElementById('timerToggle').textContent = 'Resume';
+    document.getElementById('timerStatus').textContent = 'Paused';
+    return;
+  }
+
+  if (timerRemaining <= 0) {
+    timerRemaining = 90;
+    updateTimer();
+  }
+
+  runTimer();
+}
+
+  
+document.getElementById('finishBtn').onclick = finish;
+document.getElementById('resetBtn').onclick = resetDay;
+document.getElementById('printBtn').onclick = () => window.print();
+document.getElementById('timerToggle').onclick = toggleTimer;
+document.getElementById('timerReset').onclick = () => {
+  if (timerInterval !== null) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  timerRemaining = 90;
+  updateTimer();
+
+  document.getElementById('timerToggle').textContent = 'Start';
+  document.getElementById('timerStatus').textContent =
+    'Choose a rest time, then start.';
 };
 
-render();
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }
+document.querySelectorAll('[data-seconds]').forEach(button => {
+  button.onclick = () => startTimer(Number(button.dataset.seconds));
+});
 
+['bodyweight','weeklyNotes'].forEach(id => {
+  document.getElementById(id).addEventListener('change',event => {
+    state.profile[id === 'bodyweight' ? 'bodyweight' : 'notes'] = event.target.value;
+    save();
+  });
+});
+
+document.getElementById('exportBtn').onclick = () => {
+  const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = 'workout-tracker-backup-' + dateKey() + '.json';
+  anchor.click();
+  URL.revokeObjectURL(url);
+};
+
+document.getElementById('clearHistoryBtn').onclick = () => {
+  if (!confirm(
+    'Clear all saved workout logs and history? Export a backup first if you want to keep them.'
+  )) return;
+
+  state.logs = {};
+  state.history = [];
+  save();
+  render();
+};
+
+renderHistory();
+render();
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load',() => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
 </script>
-<footer class="brand-footer">
-    <div class="brand-name">NO DAYS WASTED™</div>
-    <div class="brand-tagline"> NO EXCUSES. KEEP MOVING.</div>
-    <div class="brand-signature">Created by Kevin Rodriguez</div>
-</footer>
 </body>
 </html>
