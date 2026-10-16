@@ -113,6 +113,53 @@ button,input,select{font:inherit}button{cursor:pointer}
 }
 
 
+/* Daily stretch dropdown */
+.stretch-dropdown {
+  margin-top: 18px;
+  padding: 14px;
+  background: rgba(8, 8, 8, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.stretch-dropdown .headrow {
+  align-items: center;
+}
+
+.stretch-dropdown .h2 {
+  font-size: 1.05rem;
+}
+
+.stretch-tip {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin: 12px 0;
+}
+
+.stretch-item {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.stretch-item strong {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.stretch-item p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.stretch-duration {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 </style></head>
 <body><main class="wrap">
 
@@ -120,7 +167,7 @@ button,input,select{font:inherit}button{cursor:pointer}
     <div>
       <div class="eyebrow">Your training plan</div>
       <h1 class="title">5-Day Workout Tracker</h1>
-      <p class="sub">Build muscle · Track every set · Train offline</p>
+      <p class="sub">RAH DEVIL DOG · </p>
     </div>
   
     <img
@@ -148,7 +195,40 @@ button,input,select{font:inherit}button{cursor:pointer}
 </section>
 
 <nav class="days" id="days" aria-label="Choose workout day"></nav>
-<section class="panel"><div class="headrow"><div><h2 class="h2" id="workoutTitle">Monday — Chest + Triceps</h2><div class="muted" id="workoutSub">About 50–60 minutes</div></div><button class="btn small" id="printBtn">Print day</button></div><div class="progress"><div class="bar" id="progressBar"></div></div><div class="muted" id="progressText">0 of 5 exercises complete</div><div id="exercises"></div><div class="actions"><button class="btn primary" id="finishBtn">Finish workout</button><button class="btn" id="resetBtn">Reset today's log</button></div><p class="toast" id="message" aria-live="polite"></p></section>
+<section class="panel"><div class="headrow"><div><h2 class="h2" id="workoutTitle">Monday — Chest + Triceps</h2><div class="muted" id="workoutSub">About 50–60 minutes</div></div><button class="btn small" id="printBtn">Print day</button></div><div class="progress"><div class="bar" id="progressBar"></div></div><div class="muted" id="progressText">0 of 5 exercises complete</div>
+  
+<div id="exercises"></div>
+
+<!-- Daily stretch dropdown -->
+<div class="stretch-dropdown">
+  <div class="headrow">
+    <div>
+      <h3 class="h2">Daily Stretches</h3>
+      <p class="muted">Recommended stretches for today's workout</p>
+    </div>
+
+    <button
+      class="btn small"
+      id="stretchToggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="stretchContent"
+    >
+      Show stretches
+    </button>
+  </div>
+
+  <div id="stretchContent" class="hidden">
+    <p class="stretch-tip">
+      Hold each stretch gently for 20–30 seconds per side.
+      Avoid bouncing or pushing into pain.
+    </p>
+    <div id="stretchList"></div>
+  </div>
+</div>
+
+<div class="actions">
+<button class="btn primary" id="finishBtn">Finish workout</button><button class="btn" id="resetBtn">Reset today's log</button></div><p class="toast" id="message" aria-live="polite"></p></section>
 <section class="panel timerpanel"><div class="timerbox"><div><div class="eyebrow">Rest timer</div><div class="timer" id="timerDisplay">01:30</div><div class="muted" id="timerStatus">Choose a rest time, then start.</div></div><div class="timerbuttons"><button class="btn small" data-seconds="60">60 sec</button><button class="btn small" data-seconds="90">90 sec</button><button class="btn small" data-seconds="120">120 sec</button><button class="btn small primary" id="timerToggle">Start</button><button class="btn small" id="timerReset">Reset</button></div></div></section>
 <section class="panel"><h2 class="h2">Body & nutrition check-in</h2><p class="muted">Optional notes saved on this device.</p><div class="stats"><div class="stat"><span>Protein target</span><strong>160–180 g</strong></div><div class="stat"><span>Calories to start</span><strong>2,700–2,800</strong></div><div class="stat"><span>Sleep goal</span><strong>7–9 hrs</strong></div></div><div class="actions" style="margin-top:14px"><div class="field"><label for="bodyweight">Today's weight (lb)</label><input id="bodyweight" type="number" step="0.1" placeholder="193.0"></div></div><div class="field" style="margin-top:10px"><label for="weeklyNotes">Notes</label><input id="weeklyNotes" type="text" placeholder="Energy, sleep, progress, etc."></div></section>
 <section class="panel historypanel"><div class="headrow"><div><h2 class="h2">Workout history</h2><p class="muted">Saved locally on this device/browser.</p></div><button class="btn small" id="exportBtn">Export backup</button></div><div id="history"></div><div class="actions"><button class="btn" id="clearHistoryBtn">Clear history</button></div></section>
@@ -167,6 +247,150 @@ const workouts=[
 {day:'Friday',short:'FRI',focus:'Upper-Body Hypertrophy',time:'About 50–60 minutes',items:[
 ['Flat Dumbbell Bench Press',3,'8–12',90,'Control the lowering and keep wrists stacked.','Smith flat bench'],['Seated Cable Row',3,'10–12',90,'Keep torso steady.','Seated row machine'],['Cable Chest Fly',2,'12–15',60,'Controlled stretch and squeeze.','Dumbbell squeeze press'],['Dumbbell Lateral Raise',3,'12–20',60,'Smooth reps; no swinging.','Cable lateral raise'],['Cable Triceps Pushdown',2,'10–15',60,'Keep elbows close to your sides.','Overhead cable extension'],['Dumbbell Hammer Curl',2,'10–15',60,'Keep wrists neutral.','Rope cable hammer curl']]}
 ];
+
+
+const dailyStretches = {
+  Monday: [
+    {
+      name: "Doorway Chest Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Place your forearm against a doorway and gently turn your body away until you feel a comfortable chest stretch."
+    },
+    {
+      name: "Overhead Triceps Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Bring one arm overhead, bend your elbow, and gently guide it with your opposite hand."
+    },
+    {
+      name: "Cross-Body Shoulder Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Bring one arm across your chest and gently hold it near the upper arm."
+    }
+  ],
+
+  Tuesday: [
+    {
+      name: "Standing Lat Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Reach one arm overhead and lean gently to the opposite side."
+    },
+    {
+      name: "Biceps Wall Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Place your palm against a wall with your arm extended and gently turn your body away."
+    },
+    {
+      name: "Upper Trapezius Stretch",
+      duration: "20 sec per side",
+      instructions: "Relax your shoulders and gently tilt your ear toward one shoulder. Do not pull hard on your head."
+    },
+    {
+      name: "Child's Pose with Reach",
+      duration: "20–30 sec",
+      instructions: "Kneel comfortably, sit your hips back, and reach forward. Skip this if kneeling bothers your knees."
+    }
+  ],
+
+  Wednesday: [
+    {
+      name: "Standing Quadriceps Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Hold your ankle behind you and gently bring your heel toward your glutes. Keep your knees comfortable."
+    },
+    {
+      name: "Standing Hamstring Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Place one heel slightly forward, soften your knee, and hinge at your hips with a neutral back."
+    },
+    {
+      name: "Wall Calf Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Place your hands on a wall, step one foot back, and keep the rear heel down."
+    },
+    {
+      name: "Standing Hip Flexor Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Use a split stance, gently tuck your pelvis, and shift forward slightly without arching your back."
+    }
+  ],
+
+  Thursday: [
+    {
+      name: "Doorway Chest Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Place your forearm against a doorway and gently turn away to stretch your chest."
+    },
+    {
+      name: "Cross-Body Shoulder Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Bring one arm across your chest without raising your shoulder toward your ear."
+    },
+    {
+      name: "Overhead Triceps Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Bend one arm overhead and gently guide the elbow with your opposite hand."
+    },
+    {
+      name: "Standing Lat Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Reach overhead and lean slightly to the opposite side."
+    }
+  ],
+
+  Friday: [
+    {
+      name: "Doorway Chest Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Use a doorway to gently stretch the front of your chest."
+    },
+    {
+      name: "Standing Lat Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Reach overhead and lean gently to the opposite side."
+    },
+    {
+      name: "Biceps Wall Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Place your palm on a wall and slowly turn away until you feel a mild stretch."
+    },
+    {
+      name: "Cross-Body Shoulder Stretch",
+      duration: "20–30 sec per side",
+      instructions: "Bring one arm across your chest and hold it gently with the other arm."
+    }
+  ]
+};
+
+function renderStretches() {
+  const workout = workouts[selected];
+  const stretches = dailyStretches[workout.day] || [];
+
+  document.getElementById("stretchList").innerHTML =
+    stretches.map(stretch => `
+      <div class="stretch-item">
+        <strong>${escapeHtml(stretch.name)}</strong>
+        <span class="stretch-duration">
+          ${escapeHtml(stretch.duration)}
+        </span>
+        <p>${escapeHtml(stretch.instructions)}</p>
+      </div>
+    `).join("");
+}
+
+// Toggle the stretch dropdown open and closed.
+document.getElementById("stretchToggle").addEventListener("click", () => {
+  const content = document.getElementById("stretchContent");
+  const button = document.getElementById("stretchToggle");
+
+  const isOpening = content.classList.contains("hidden");
+
+  content.classList.toggle("hidden");
+  button.textContent = isOpening
+    ? "Hide stretches"
+    : "Show stretches";
+
+  button.setAttribute("aria-expanded", String(isOpening));
+});
 
 const dailyQuotes = [
   {
@@ -261,23 +485,259 @@ setInterval(() => {
   showQuote((current + 1) % dailyQuotes.length);
 }, 60000);
 
-const KEY='offlineWorkoutTracker_v1';let state=load();let selected=0;let timerRemaining=90,timerInterval=null;
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||{logs:{},profile:{}}}catch(e){return{logs:{},profile:{}}}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.getElementById('message').textContent='Could not save in this browser. Export a backup if possible.'}renderHistory()}
+
+const KEY = 'offlineWorkoutTracker_v1';
+
+let state = load();
+let selected = 0;
+let timerRemaining = 90;
+let timerInterval = null;
+
+function load() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY));
+
+    // Start with the existing saved data when available.
+    const data = saved || {
+      logs: {},
+      profile: {},
+      history: []
+    };
+
+    // Make sure all three sections exist.
+    data.logs ||= {};
+    data.profile ||= {};
+    data.history ||= [];
+
+    // Import completed workouts from the old format once.
+    if (!data.historyMigrated) {
+  const oldHistory = Object.entries(data.logs)
+    .filter(([key, log]) => log && log.finished)
+    .map(([key, log]) => {
+      const [date, day] = key.split('|');
+
+      return {
+        id: key,
+        date,
+        day,
+        sets: log.sets || {},
+        done: log.done || {},
+        finishedAt: log.finishedAt || null
+      };
+    });
+
+  // Keep existing history and add any older completed workouts.
+  const existingIds = new Set(data.history.map(entry => entry.id));
+
+  oldHistory.forEach(entry => {
+    if (!existingIds.has(entry.id)) {
+      data.history.push(entry);
+    }
+  });
+
+  data.historyMigrated = true;
+
+      // Save the migration so it won't run again.
+      localStorage.setItem(KEY, JSON.stringify(data));
+    }
+
+    return data;
+  } catch (error) {
+    return {
+      logs: {},
+      profile: {},
+      history: [],
+      historyMigrated: true
+    };
+  }
+}
+
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  } catch (error) {
+    document.getElementById('message').textContent =
+      'Could not save in this browser. Export a backup if possible.';
+  }
+
+  renderHistory();
+}
+
 function dateKey(){return new Date().toLocaleDateString('en-CA')}
 function logKey(w){return dateKey()+'|'+w.day}
 function getLog(w){const k=logKey(w);if(!state.logs[k])state.logs[k]={sets:{},done:{},finished:false};return state.logs[k]}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderDays(){document.getElementById('days').innerHTML=workouts.map((w,i)=>`<button class="daybtn ${i===selected?'active':''}" data-day="${i}">${w.short}<span>Day ${i+1}</span></button>`).join('');document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{selected=+b.dataset.day;render()})}
-function render(){renderDays();const w=workouts[selected],log=getLog(w);document.getElementById('workoutTitle').textContent=w.day+' — '+w.focus;document.getElementById('workoutSub').textContent=w.time+' · '+w.items.length+' exercises';document.getElementById('exercises').innerHTML=w.items.map((it,i)=>{let [name,n,reps,rest,note,sub]=it;let done=!!log.done[i];let setRows=Array.from({length:n},(_,j)=>{let v=(log.sets[i]||[])[j]||{};return `<tr><td>${j+1}</td><td><input aria-label="Set ${j+1} weight" data-ex="${i}" data-set="${j}" data-field="weight" value="${escapeHtml(v.weight||'')}" placeholder="lb" inputmode="decimal"></td><td><input aria-label="Set ${j+1} reps" data-ex="${i}" data-set="${j}" data-field="reps" value="${escapeHtml(v.reps||'')}" placeholder="${escapeHtml(reps)}" inputmode="text"></td><td><input class="setdone" aria-label="Set ${j+1} complete" type="checkbox" data-ex="${i}" data-set="${j}" data-field="done" ${v.done?'checked':''}></td></tr>`}).join('');return `<article class="exercise"><div class="exhead"><input class="check" type="checkbox" aria-label="Mark ${escapeHtml(name)} complete" data-exdone="${i}" ${done?'checked':''}><div style="flex:1"><div class="exname">${i+1}. ${escapeHtml(name)}</div><div class="meta"><span class="tag">${n} sets</span><span class="tag">${escapeHtml(reps)} reps</span><span class="tag">Rest ${rest>=60?Math.floor(rest/60)+(rest%60?':'+String(rest%60).padStart(2,'0'):'')+' min':' '+rest+' sec'}</span><button class="btn small" data-rest="${rest}">Start rest</button></div></div></div><div class="note">${escapeHtml(note)}</div><div class="substitution">Swap if needed: ${escapeHtml(sub)}</div><table class="sets"><thead><tr><th>Set</th><th>Weight</th><th>Reps done</th><th>✓</th></tr></thead><tbody>${setRows}</tbody></table></article>`}).join('');document.getElementById('progressText').textContent=w.items.filter((x,i)=>log.done[i]).length+' of '+w.items.length+' exercises complete'+(log.finished?' · Workout saved':'');document.getElementById('progressBar').style.width=(w.items.filter((x,i)=>log.done[i]).length/w.items.length*100)+'%';document.getElementById('bodyweight').value=state.profile.bodyweight||'';document.getElementById('weeklyNotes').value=state.profile.notes||'';wireInputs();document.getElementById('message').textContent='';}
-function wireInputs(){document.querySelectorAll('[data-ex][data-field]').forEach(el=>el.addEventListener('change',()=>{const log=getLog(workouts[selected]),i=+el.dataset.ex,j=+el.dataset.set,f=el.dataset.field;log.sets[i] ||= [];log.sets[i][j] ||= {};log.sets[i][j][f]=f==='done'?el.checked:el.value;save();}));document.querySelectorAll('[data-exdone]').forEach(el=>el.onchange=()=>{getLog(workouts[selected]).done[el.dataset.exdone]=el.checked;save();renderProgressOnly()});document.querySelectorAll('[data-rest]').forEach(el=>el.onclick=()=>startTimer(+el.dataset.rest));}
+
+function renderDays() {
+  document.getElementById('days').innerHTML = workouts.map((w, i) =>
+    `<button class="daybtn ${i === selected ? 'active' : ''}" data-day="${i}">
+      ${w.short}<span>Day ${i + 1}</span>
+    </button>`
+  ).join('');
+
+  document.querySelectorAll('[data-day]').forEach(el => {
+    el.onclick = () => {
+      selected = Number(el.dataset.day);
+      render();
+    };
+  });
+}
+
+function render(){renderDays();const w=workouts[selected],log=getLog(w);document.getElementById('workoutTitle').textContent=w.day+' — '+w.focus;document.getElementById('workoutSub').textContent=w.time+' · '+w.items.length+' exercises';document.getElementById('exercises').innerHTML=w.items.map((it,i)=>{let [name,n,reps,rest,note,sub]=it;let done=!!log.done[i];let setRows=Array.from({length:n},(_,j)=>{let v=(log.sets[i]||[])[j]||{};return `<tr><td>${j+1}</td><td><input aria-label="Set ${j+1} weight" data-ex="${i}" data-set="${j}" data-field="weight" value="${escapeHtml(v.weight||'')}" placeholder="lb" inputmode="decimal"></td><td><input aria-label="Set ${j+1} reps" data-ex="${i}" data-set="${j}" data-field="reps" value="${escapeHtml(v.reps||'')}" placeholder="${escapeHtml(reps)}" inputmode="text"></td><td><input class="setdone" aria-label="Set ${j+1} complete" type="checkbox" data-ex="${i}" data-set="${j}" data-field="done" ${v.done?'checked':''}></td></tr>`}).join('');return `<article class="exercise"><div class="exhead"><input class="check" type="checkbox" aria-label="Mark ${escapeHtml(name)} complete" data-exdone="${i}" ${done?'checked':''}><div style="flex:1"><div class="exname">${i+1}. ${escapeHtml(name)}</div><div class="meta"><span class="tag">${n} sets</span><span class="tag">${escapeHtml(reps)} reps</span><span class="tag">Rest ${rest>=60?Math.floor(rest/60)+(rest%60?':'+String(rest%60).padStart(2,'0'):'')+' min':' '+rest+' sec'}</span><button class="btn small" data-rest="${rest}">Start rest</button></div></div></div><div class="note">${escapeHtml(note)}</div><div class="substitution">Swap if needed: ${escapeHtml(sub)}</div><table class="sets"><thead><tr><th>Set</th><th>Weight</th><th>Reps done</th><th>✓</th></tr></thead><tbody>${setRows}</tbody></table></article>`}).join('');document.getElementById('progressText').textContent=w.items.filter((x,i)=>log.done[i]).length+' of '+w.items.length+' exercises complete'+(log.finished?' · Workout saved':'');document.getElementById('progressBar').style.width=(w.items.filter((x,i)=>log.done[i]).length/w.items.length*100)+'%';document.getElementById('bodyweight').value=state.profile.bodyweight||'';document.getElementById('weeklyNotes').value=state.profile.notes||'';
+
+wireInputs();
+renderStretches();
+document.getElementById('message').textContent = '';
+}
+function wireInputs(){document.querySelectorAll('[data-ex][data-field]').forEach(el=>el.addEventListener('change',()=>{const log=getLog(workouts[selected]),i=+el.dataset.ex,j=+el.dataset.set,f=el.dataset.field;log.sets[i] ||= [];log.sets[i][j] ||= {};log.sets[i][j][f]=f==='done'?el.checked:el.value;save();}));
+
+document.querySelectorAll('[data-exdone]').forEach(el => {
+  el.onchange = () => {
+    const log = getLog(workouts[selected]);
+
+    // Save the checkbox change.
+    log.done[el.dataset.exdone] = el.checked;
+
+    save();
+    renderProgressOnly();
+
+    // Automatically finish when every exercise is checked.
+    autoFinishIfComplete();
+  };
+});
+
+document.querySelectorAll('[data-rest]').forEach(el=>el.onclick=()=>startTimer(+el.dataset.rest));}
 function renderProgressOnly(){const w=workouts[selected],l=getLog(w),n=w.items.filter((x,i)=>l.done[i]).length;document.getElementById('progressText').textContent=n+' of '+w.items.length+' exercises complete'+(l.finished?' · Workout saved':'');document.getElementById('progressBar').style.width=n/w.items.length*100+'%';}
-function finish(){const w=workouts[selected],l=getLog(w);l.finished=true;l.finishedAt=new Date().toISOString();save();renderProgressOnly();document.getElementById('message').textContent='Workout saved to this device. Great work!'}
+
+
+function autoFinishIfComplete() {
+  const w = workouts[selected];
+  const log = getLog(w);
+
+  // Check whether every exercise is marked complete.
+  const allComplete = w.items.every(
+    (item, index) => log.done[index]
+  );
+
+  if (!allComplete) {
+    return;
+  }
+
+  // Find this workout session's existing history entry.
+  const existing = state.history.find(
+    entry => entry.id === log.historyId
+  );
+
+  // Avoid saving the same completed session twice.
+  const historyAlreadyComplete =
+    existing &&
+    w.items.every((item, index) => existing.done?.[index]);
+
+  if (historyAlreadyComplete) {
+    return;
+  }
+
+  // Save or update the completed workout.
+  finish();
+}
+
+function finish() {
+  const w = workouts[selected];
+  const l = getLog(w);
+
+  
+  // Mark the workout as finished.
+  l.finished = true;
+  l.finishedAt = new Date().toISOString();
+
+  // Give this workout session its own permanent ID.
+  // Repeated clicks on Finish won't create duplicate entries.
+  if (!l.historyId) {
+    l.historyId = logKey(w) + '|' + Date.now();
+  }
+
+
+  // Create a permanent snapshot for workout history.
+  const historyEntry = {
+    id: l.historyId,
+    date: dateKey(),
+    day: w.day,
+    sets: JSON.parse(JSON.stringify(l.sets)),
+    done: JSON.parse(JSON.stringify(l.done)),
+    finishedAt: l.finishedAt
+  };
+
+  // Update today's existing history entry or add a new one.
+  const existingIndex = state.history.findIndex(
+    entry => entry.id === historyEntry.id
+  );
+
+  if (existingIndex !== -1) {
+    state.history[existingIndex] = historyEntry;
+  } else {
+    state.history.push(historyEntry);
+  }
+
+  save();
+  renderProgressOnly();
+
+  document.getElementById('message').textContent =
+    'workout saved, do it again tomorrow maggot';
+}
+
 function resetDay(){if(!confirm('Reset today’s log for '+workouts[selected].day+'? This removes today’s sets and checkmarks for this day.'))return;delete state.logs[logKey(workouts[selected])];save();render();}
-function renderHistory(){const root=document.getElementById('history');let rows=Object.entries(state.logs).filter(([k,v])=>v.finished).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,12);root.innerHTML=rows.length?rows.map(([k,v])=>{let [date,day]=k.split('|');let w=workouts.find(x=>x.day===day);let done=w?w.items.filter((x,i)=>v.done[i]).length:0;return `<div class="historyrow"><strong>${escapeHtml(day)}</strong> <span class="muted">${escapeHtml(date)}</span><div class="muted">${done} exercises checked · ${v.finishedAt?new Date(v.finishedAt).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'Saved'}</div></div>`}).join(''):'<p class="muted">No completed workouts yet. Tap “Finish workout” to add a session here.</p>'}
+
+function renderHistory() {
+  const root = document.getElementById('history');
+
+  // Read from permanent history, not today's workout logs.
+  const rows = [...state.history]
+    .sort((a, b) => {
+      return (b.finishedAt || '').localeCompare(a.finishedAt || '');
+    })
+    .slice(0, 12);
+
+  root.innerHTML = rows.length
+    ? rows.map(entry => {
+        const w = workouts.find(x => x.day === entry.day);
+        const done = w
+          ? w.items.filter((x, i) => entry.done?.[i]).length
+          : 0;
+
+        const time = entry.finishedAt
+          ? new Date(entry.finishedAt).toLocaleTimeString([], {
+              hour: 'numeric',
+              minute: '2-digit'
+            })
+          : 'Saved';
+
+        return `
+          <div class="historyrow">
+            <strong>${escapeHtml(entry.day)}</strong>
+            <span class="muted">${escapeHtml(entry.date)}</span>
+            <div class="muted">
+              ${done} exercises checked · ${escapeHtml(time)}
+            </div>
+          </div>
+        `;
+      }).join('')
+    : '<p class="muted">No completed workouts yet. Tap "Finish workout" to add a session here.</p>';
+}
 function startTimer(sec){timerRemaining=sec;updateTimer();if(timerInterval){clearInterval(timerInterval);timerInterval=null;}document.getElementById('timerStatus').textContent='Ready when you are.';document.getElementById('timerToggle').textContent='Start'}function updateTimer(){document.getElementById('timerDisplay').textContent=String(Math.floor(timerRemaining/60)).padStart(2,'0')+':'+String(timerRemaining%60).padStart(2,'0')}
 function toggleTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;document.getElementById('timerToggle').textContent='Resume';document.getElementById('timerStatus').textContent='Paused';return}if(timerRemaining<=0)timerRemaining=90;document.getElementById('timerToggle').textContent='Pause';document.getElementById('timerStatus').textContent='Resting…';timerInterval=setInterval(()=>{timerRemaining--;updateTimer();if(timerRemaining<=0){clearInterval(timerInterval);timerInterval=null;document.getElementById('timerToggle').textContent='Start again';document.getElementById('timerStatus').textContent='Rest complete — next set!';if('vibrate'in navigator)navigator.vibrate([180,80,180]);}},1000)}
-document.getElementById('finishBtn').onclick=finish;document.getElementById('resetBtn').onclick=resetDay;document.getElementById('printBtn').onclick=()=>window.print();document.getElementById('timerToggle').onclick=toggleTimer;document.getElementById('timerReset').onclick=()=>startTimer(90);document.querySelectorAll('[data-seconds]').forEach(b=>b.onclick=()=>startTimer(+b.dataset.seconds));['bodyweight','weeklyNotes'].forEach(id=>document.getElementById(id).addEventListener('change',e=>{state.profile[id==='bodyweight'?'bodyweight':'notes']=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(err){}}));document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='workout-tracker-backup-'+dateKey()+'.json';a.click();URL.revokeObjectURL(url)};document.getElementById('clearHistoryBtn').onclick=()=>{if(confirm('Clear all saved workout logs on this device? Export a backup first if you want to keep them.')){state.logs={};save();render()}};
+document.getElementById('finishBtn').onclick=finish;document.getElementById('resetBtn').onclick=resetDay;document.getElementById('printBtn').onclick=()=>window.print();document.getElementById('timerToggle').onclick=toggleTimer;document.getElementById('timerReset').onclick=()=>startTimer(90);document.querySelectorAll('[data-seconds]').forEach(b=>b.onclick=()=>startTimer(+b.dataset.seconds));['bodyweight','weeklyNotes'].forEach(id=>document.getElementById(id).addEventListener('change',e=>{state.profile[id==='bodyweight'?'bodyweight':'notes']=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(err){}}));document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='workout-tracker-backup-'+dateKey()+'.json';a.click();URL.revokeObjectURL(url)};
+document.getElementById('clearHistoryBtn').onclick = () => {
+  if (confirm(
+    'Clear all saved workout logs and history? Export a backup first if you want to keep them.'
+  )) {
+    state.logs = {};
+    state.history = [];
+
+    save();
+    render();
+  }
+};
+
 render();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }
 
